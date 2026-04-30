@@ -1,10 +1,10 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Layout from './components/layout'
-import Dashboard from './pages/dashboard'
-import Leads from './pages/leads'
+import Layout from './components/Layout'
+import Dashboard from './pages/Dashboard'
+import Leads from './pages/Leads'
 import AddLead from './pages/AddLeads'
 import LeadDetail from './pages/LeadDetail'
-import Revival from './pages/revival'
+import Revival from './pages/Revival'
 import EditLead from './pages/EditLead'
 
 
