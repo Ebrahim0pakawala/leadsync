@@ -1,4 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
+import useAuth from '../contexts/AuthContext'
 
 const links = [
     { to: '/', label: 'Dashboard', icon: '📊' },
@@ -9,6 +10,7 @@ const links = [
 
 export default function Sidebar() {
   const location = useLocation()
+  const { signOut } = useAuth()
 
   return (
     <div className="w-56 bg-white border-r border-gray-100 flex flex-col py-6 px-3">
@@ -32,6 +34,13 @@ export default function Sidebar() {
           </Link>
         ))}
       </nav>
+      <button
+        type="button"
+        onClick={signOut}
+        className="mt-auto mx-3 text-sm text-gray-600 border border-gray-200 rounded-lg py-2 hover:bg-gray-50"
+      >
+        Log out
+      </button>
     </div>
   )
 }
