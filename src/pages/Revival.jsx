@@ -15,7 +15,7 @@ export default function Revival() {
 
   async function fetchColdLeads() {
     const cutoff = new Date()
-    cutoff.setDate(cutoff.getDate() - 0)
+    cutoff.setDate(cutoff.getDate() - 14)
 
     const { data } = await supabase
       .from('leads')
