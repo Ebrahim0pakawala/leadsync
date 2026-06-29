@@ -2,21 +2,26 @@ import { Link, useLocation } from 'react-router-dom'
 import useAuth from '../contexts/AuthContext'
 
 const links = [
-    { to: '/', label: 'Dashboard', icon: '📊' },
-    { to: '/leads', label: 'All Leads', icon: '👥' },
-    { to: '/add-lead', label: 'Add Lead', icon: '➕' },
-    { to: '/revival', label: 'Revival Queue', icon: '🔥' },
-  ]
+  { to: '/', label: 'Dashboard', icon: '📊' },
+  { to: '/leads', label: 'All Leads', icon: '👥' },
+  { to: '/add-lead', label: 'Add Lead', icon: '➕' },
+  { to: '/revival', label: 'Revival Queue', icon: '🔥' },
+]
 
 export default function Sidebar() {
   const location = useLocation()
-  const { signOut } = useAuth()
+  const { signOut, user } = useAuth()
 
   return (
     <div className="w-56 bg-white border-r border-gray-100 flex flex-col py-6 px-3">
       <div className="px-3 mb-8">
         <h1 className="text-lg font-semibold text-gray-900">LeadSync</h1>
         <p className="text-xs text-gray-400 mt-0.5">Lead Intelligence</p>
+        {user?.email && (
+          <p className="text-xs text-gray-500 mt-2 truncate" title={user.email}>
+            {user.email}
+          </p>
+        )}
       </div>
       <nav className="flex flex-col gap-1">
         {links.map(link => (

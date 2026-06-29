@@ -7,6 +7,7 @@ import LeadDetail from './pages/LeadDetail'
 import Revival from './pages/Revival'
 import EditLead from './pages/EditLead'
 import Login from './pages/Login'
+import NotFound from './pages/NotFound'
 import useAuth, { AuthProvider } from './contexts/AuthContext'
 
 
@@ -21,22 +22,25 @@ function AppContent() {
     )
   }
 
-  if (!user) {
-    return <Login />
-  }
-
   return (
     <BrowserRouter>
-      <Layout>
+      {!user ? (
         <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/leads" element={<Leads />} />
-          <Route path="/add-lead" element={<AddLead />} />
-          <Route path="/leads/:id" element={<LeadDetail />} />
-          <Route path="/revival" element={<Revival />} />
-          <Route path="/leads/:id/edit" element={<EditLead />} />
+          <Route path="/*" element={<Login />} />
         </Routes>
-      </Layout>
+      ) : (
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/leads" element={<Leads />} />
+            <Route path="/add-lead" element={<AddLead />} />
+            <Route path="/leads/:id" element={<LeadDetail />} />
+            <Route path="/revival" element={<Revival />} />
+            <Route path="/leads/:id/edit" element={<EditLead />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Layout>
+      )}
     </BrowserRouter>
   )
 }

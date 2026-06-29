@@ -10,15 +10,23 @@ export default function EditLead() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState(null)
+  const storageKey = `leadsync:edit-lead-draft-${id}`
 
   useEffect(() => {
     async function fetchLead() {
       const { data } = await supabase.from('leads').select('*').eq('id', id).single()
-      setForm(data)
+      const draft = localStorage.getItem(storageKey)
+      const merged = draft ? { ...data, ...JSON.parse(draft) } : data
+      setForm(merged)
       setLoading(false)
     }
     fetchLead()
-  }, [id])
+  }, [id, storageKey])
+
+  useEffect(() => {
+    if (!form) return
+    localStorage.setItem(storageKey, JSON.stringify(form))
+  }, [form, storageKey])
 
   function handleChange(e) {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }))
@@ -37,6 +45,7 @@ export default function EditLead() {
         .update({ ...form, score, priority, conversion_probability })
         .eq('id', id)
       if (updateError) throw updateError
+      localStorage.removeItem(storageKey)
       navigate(`/leads/${id}`)
     } catch (err) {
       setError(err.message)
@@ -48,6 +57,7 @@ export default function EditLead() {
   async function deleteLead() {
     if (!window.confirm('Delete this lead? This cannot be undone.')) return
     await supabase.from('leads').delete().eq('id', id)
+    localStorage.removeItem(storageKey)
     navigate('/leads')
   }
 

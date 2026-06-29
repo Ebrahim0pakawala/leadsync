@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../supabaseClient'
 import { calculateScore } from '../lib/scoring'
@@ -19,6 +19,22 @@ export default function AddLead() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const navigate = useNavigate()
+  const storageKey = 'leadsync:add-lead-draft'
+
+  useEffect(() => {
+    const draft = localStorage.getItem(storageKey)
+    if (draft) {
+      try {
+        setForm(prev => ({ ...prev, ...JSON.parse(draft) }))
+      } catch {
+        localStorage.removeItem(storageKey)
+      }
+    }
+  }, [storageKey])
+
+  useEffect(() => {
+    localStorage.setItem(storageKey, JSON.stringify(form))
+  }, [form, storageKey])
 
   function handleChange(e) {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }))
@@ -57,6 +73,7 @@ export default function AddLead() {
       }])
 
       if (insertError) throw insertError
+      localStorage.removeItem(storageKey)
       navigate('/leads')
     } catch (err) {
       setError(err.message)
